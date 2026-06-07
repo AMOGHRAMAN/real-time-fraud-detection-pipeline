@@ -1,2 +1,3 @@
-# real-time-fraud-detection-pipeline
-Real-time fraud detection pipeline using Kafka, Spark Structured Streaming, PostgreSQL and Docker.
+# Real-Time Fraud Detection Pipeline 
+
+Streaming financial transactions through Kafka and Spark Structured Streaming for fraud detection and alerting.
