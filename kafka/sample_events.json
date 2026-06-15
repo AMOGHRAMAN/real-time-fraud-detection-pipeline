@@ -1,0 +1,23 @@
+[
+  {
+    "transaction_id": "TXN1001",
+    "customer_id": "CUST101",
+    "amount": 5000,
+    "country": "IN",
+    "merchant_type": "RETAIL"
+  },
+  {
+    "transaction_id": "TXN1002",
+    "customer_id": "CUST102",
+    "amount": 750000,
+    "country": "NG",
+    "merchant_type": "ONLINE"
+  },
+  {
+    "transaction_id": "TXN1003",
+    "customer_id": "CUST103",
+    "amount": 25000,
+    "country": "US",
+    "merchant_type": "RETAIL"
+  }
+]
