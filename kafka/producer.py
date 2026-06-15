@@ -33,7 +33,7 @@ for txn in transactions:
 
     print(f"Published: {txn['transaction_id']}")
 
-    time.sleep(2)
+    time.sleep(0.2)
 
 producer.flush()
 

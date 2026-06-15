@@ -1,23 +1,22 @@
 [
-  {
-    "transaction_id": "TXN1001",
-    "customer_id": "CUST101",
-    "amount": 5000,
-    "country": "IN",
-    "merchant_type": "RETAIL"
-  },
-  {
-    "transaction_id": "TXN1002",
-    "customer_id": "CUST102",
-    "amount": 750000,
-    "country": "NG",
-    "merchant_type": "ONLINE"
-  },
-  {
-    "transaction_id": "TXN1003",
-    "customer_id": "CUST103",
-    "amount": 25000,
-    "country": "US",
-    "merchant_type": "RETAIL"
-  }
+  {"transaction_id":"TXN1001","customer_id":"CUST101","amount":5000,"country":"IN"},
+  {"transaction_id":"TXN1002","customer_id":"CUST102","amount":750000,"country":"NG"},
+  {"transaction_id":"TXN1003","customer_id":"CUST103","amount":15000,"country":"IN"},
+  {"transaction_id":"TXN1004","customer_id":"CUST104","amount":850000,"country":"US"},
+  {"transaction_id":"TXN1005","customer_id":"CUST105","amount":9500,"country":"IN"},
+  {"transaction_id":"TXN1006","customer_id":"CUST106","amount":450000,"country":"UK"},
+  {"transaction_id":"TXN1007","customer_id":"CUST107","amount":1250000,"country":"RU"},
+  {"transaction_id":"TXN1008","customer_id":"CUST108","amount":7000,"country":"IN"},
+  {"transaction_id":"TXN1009","customer_id":"CUST109","amount":620000,"country":"CN"},
+  {"transaction_id":"TXN1010","customer_id":"CUST110","amount":22000,"country":"IN"},
+  {"transaction_id":"TXN1011","customer_id":"CUST111","amount":780000,"country":"BR"},
+  {"transaction_id":"TXN1012","customer_id":"CUST112","amount":18000,"country":"IN"},
+  {"transaction_id":"TXN1013","customer_id":"CUST113","amount":900000,"country":"ZA"},
+  {"transaction_id":"TXN1014","customer_id":"CUST114","amount":11000,"country":"IN"},
+  {"transaction_id":"TXN1015","customer_id":"CUST115","amount":350000,"country":"DE"},
+  {"transaction_id":"TXN1016","customer_id":"CUST116","amount":990000,"country":"US"},
+  {"transaction_id":"TXN1017","customer_id":"CUST117","amount":4500,"country":"IN"},
+  {"transaction_id":"TXN1018","customer_id":"CUST118","amount":670000,"country":"AE"},
+  {"transaction_id":"TXN1019","customer_id":"CUST119","amount":12000,"country":"IN"},
+  {"transaction_id":"TXN1020","customer_id":"CUST120","amount":1500000,"country":"NG"}
 ]

@@ -23,7 +23,8 @@ Fraud detection using configurable business rules
 Data persistence in PostgreSQL
 End-to-end pipeline orchestration using Docker
 Monitoring and analysis of suspicious transactions
-Why I Built This
+
+Why I Built This?
 
 As a Software Engineer currently working on large-scale data processing and ETL systems, I wanted to gain practical experience with real-time data pipelines and event-driven architectures.Rather than only studying the concepts, I decided to build a complete project that simulates a real-world fraud detection workflow commonly used in banking and financial services.
 
