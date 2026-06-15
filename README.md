@@ -1,41 +1,134 @@
-# Real-Time Fraud Detection Pipeline 
+# Real-Time Fraud Detection Pipeline
 
-Overview
+## Overview
 
-This project is a hands-on implementation of a real-time fraud detection system built using modern data engineering technologies.
+A real-time fraud detection platform built using Apache Kafka, Python, PostgreSQL, Docker, and Streamlit.
 
-The goal is to simulate how financial transactions are processed in real-world banking and fintech environments. Transaction events are streamed through Apache Kafka, processed in real time using Spark Structured Streaming, checked against fraud detection rules, and stored for further analysis and reporting.
+The system simulates financial transaction events, processes them through a Kafka-based event-driven architecture, applies configurable fraud detection rules, persists results into PostgreSQL, and visualizes fraud metrics through a Streamlit dashboard.
 
-This project is part of my journey to strengthen my Data Engineering skills by building an end-to-end streaming data pipeline from scratch.
+---
 
-Tech Stack
-Apache Kafka
-Apache Spark Structured Streaming
+## Architecture
+
+Transaction Generator
+
+↓
+
+Kafka Producer
+
+↓
+
+Kafka Topic (transactions_topic)
+
+↓
+
+Kafka Consumer
+
+↓
+
+Fraud Detection Engine
+
+↓
+
 PostgreSQL
-Docker
-Python
-SQL
 
-What This Project Covers
-Real-time data ingestion using Kafka
-Stream processing with Spark Structured Streaming
-Fraud detection using configurable business rules
-Data persistence in PostgreSQL
-End-to-end pipeline orchestration using Docker
-Monitoring and analysis of suspicious transactions
+↓
 
-Why I Built This?
+Streamlit Dashboard
 
-As a Software Engineer currently working on large-scale data processing and ETL systems, I wanted to gain practical experience with real-time data pipelines and event-driven architectures.Rather than only studying the concepts, I decided to build a complete project that simulates a real-world fraud detection workflow commonly used in banking and financial services.
+---
 
-Learning Objectives
-Understand event-driven system design
-Build scalable streaming data pipelines
-Work with real-time processing frameworks
-Apply data engineering best practices
-Create a portfolio project that demonstrates practical Data Engineering skills
-Current Status
+## Features
 
-✅ Project Planning Completed
-✅ Repository Setup Completed
-🔄 Development In Progress
+* Event-driven architecture using Apache Kafka
+* Real-time transaction ingestion
+* Rule-based fraud risk scoring
+* PostgreSQL persistence layer
+* Fraud alert generation
+* Interactive dashboard
+* Dockerized infrastructure
+* Idempotent processing design
+
+---
+
+## Technology Stack
+
+| Layer            | Technology    |
+| ---------------- | ------------- |
+| Language         | Python 3.12   |
+| Messaging        | Apache Kafka  |
+| Database         | PostgreSQL 16 |
+| Containerization | Docker        |
+| Dashboard        | Streamlit     |
+| Version Control  | Git & GitHub  |
+
+---
+
+## Fraud Detection Logic
+
+### Amount Rules
+
+| Amount      | Score |
+| ----------- | ----- |
+| > 1,000,000 | +70   |
+| > 500,000   | +50   |
+| > 100,000   | +20   |
+
+### Country Rules
+
+| Country      | Score |
+| ------------ | ----- |
+| Not IN/US/UK | +30   |
+
+### Risk Classification
+
+| Score | Risk     |
+| ----- | -------- |
+| >= 80 | CRITICAL |
+| >= 50 | HIGH     |
+| >= 30 | MEDIUM   |
+| < 30  | LOW      |
+
+---
+
+## Running The Project
+
+### Start Infrastructure
+
+docker compose up -d
+
+### Start Consumer
+
+python kafka/consumer.py
+
+### Start Producer
+
+python kafka/producer.py
+
+### Launch Dashboard
+
+streamlit run dashboard/app.py
+
+---
+
+## Sample Dashboard
+
+Add dashboard screenshot here
+
+---
+
+## Future Enhancements
+
+* Spark Structured Streaming
+* Machine Learning Fraud Detection
+* Grafana Monitoring
+* Airflow Orchestration
+* Email/SMS Alerting
+* Kubernetes Deployment
+
+---
+
+## Author
+
+Amogh Raman
+Data Engineer | Apache Spark | Kafka | Airflow | GCP
