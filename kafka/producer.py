@@ -9,8 +9,20 @@ producer = KafkaProducer(
     value_serializer=lambda v: json.dumps(v).encode("utf-8")
 )
 
-with open("kafka/sample_events.json", "r") as file:
-    transactions = json.load(file)
+transactions = [
+    {
+        "transaction_id": "TXN1001",
+        "customer_id": "CUST101",
+        "amount": 5000,
+        "country": "IN"
+    },
+    {
+        "transaction_id": "TXN1002",
+        "customer_id": "CUST102",
+        "amount": 750000,
+        "country": "NG"
+    }
+]
 
 for txn in transactions:
 
@@ -19,10 +31,10 @@ for txn in transactions:
         value=txn
     )
 
-    print(f"Published Transaction: {txn['transaction_id']}")
+    print(f"Published: {txn['transaction_id']}")
 
     time.sleep(2)
 
 producer.flush()
 
-print("All transactions published successfully.")
+print("All messages published")
