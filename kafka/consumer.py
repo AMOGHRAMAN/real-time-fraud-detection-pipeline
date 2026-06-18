@@ -1,5 +1,6 @@
 import json
 from kafka import KafkaConsumer
+from fraud_engine import calculate_risk
 import psycopg2
 
 TOPIC_NAME = "transactions_topic"
