@@ -1,9 +1,5 @@
 # System Architecture
 
-## High-Level Architecture
-
-![Architecture](architecture.png)
-
 ## Components
 
 ### Producer
