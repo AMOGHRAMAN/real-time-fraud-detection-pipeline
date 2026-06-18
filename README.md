@@ -86,21 +86,12 @@ python kafka/producer.py
 
 streamlit run dashboard/app.py
 
----
-
-## Sample Dashboard
-
-Add dashboard screenshot here
-
----
-
 ## Future Enhancements
 
 * Spark Structured Streaming
 * Machine Learning Fraud Detection
 * Grafana Monitoring
 * Airflow Orchestration
-* Email/SMS Alerting
 * Kubernetes Deployment
 
 ---
