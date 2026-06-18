@@ -2,9 +2,9 @@
 
 ## Overview
 
-A real-time fraud detection platform built using Apache Kafka, Python, PostgreSQL, Docker, and Streamlit.
+A production-inspired real-time fraud detection platform built using Apache Kafka, PostgreSQL, Docker, Python, and Streamlit.
 
-The system simulates financial transaction events, processes them through a Kafka-based event-driven architecture, applies configurable fraud detection rules, persists results into PostgreSQL, and visualizes fraud metrics through a Streamlit dashboard.
+The system simulates financial transaction events, ingests them through an event-driven Kafka architecture, applies configurable fraud detection rules, persists results into PostgreSQL, and provides real-time fraud analytics through an interactive Streamlit dashboard.
 
 ---
 
@@ -85,6 +85,19 @@ python kafka/producer.py
 ### Launch Dashboard
 
 streamlit run dashboard/app.py
+
+---
+
+### End-to-End Data Flow
+
+* Transaction Generator creates synthetic financial transactions.
+* Kafka Producer publishes transaction events to Kafka topics.
+* Kafka stores events in a durable distributed log.
+* Kafka Consumer reads events using offset-based processing.
+* Fraud Detection Engine evaluates transactions against configured fraud rules.
+* Fraud scores and alerts are persisted into PostgreSQL.
+* Invalid or malformed events are redirected to the Dead Letter Queue.
+* Streamlit Dashboard visualizes fraud metrics and transaction insights.
 
 ## Future Enhancements
 
