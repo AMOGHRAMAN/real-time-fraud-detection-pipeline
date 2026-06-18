@@ -69,13 +69,11 @@ The system simulates financial transaction events, ingests them through an event
 
 ### Overview
 
-![Dashboard Overview](<img width="1822" height="865" alt="image" src="https://github.com/user-attachments/assets/f97e6ec7-31b1-4461-bdac-015ba200a2c9" />
-)
+![Dashboard Overview](https://github.com/user-attachments/assets/f97e6ec7-31b1-4461-bdac-015ba200a2c9)
 
 ### Fraud Alerts
 
-![Fraud Alerts](<img width="1775" height="627" alt="image" src="https://github.com/user-attachments/assets/0a580ae2-9e70-4c6d-b840-23502d2a1204" />
-)
+![Fraud Alerts](https://github.com/user-attachments/assets/0a580ae2-9e70-4c6d-b840-23502d2a1204)
 
 ---
 
