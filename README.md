@@ -10,8 +10,6 @@ The system simulates financial transaction events, ingests them through an event
 
 ## Architecture
 
-Streamlit Dashboard
-
 <img width="1201" height="1309" alt="image" src="https://github.com/user-attachments/assets/f803b2d4-ad8d-4952-ae35-bb198388cfaf" />
 
 
@@ -67,6 +65,19 @@ Streamlit Dashboard
 | < 30  | LOW      |
 
 ---
+## Dashboard
+
+### Overview
+
+![Dashboard Overview](<img width="1822" height="865" alt="image" src="https://github.com/user-attachments/assets/f97e6ec7-31b1-4461-bdac-015ba200a2c9" />
+)
+
+### Fraud Alerts
+
+![Fraud Alerts](<img width="1775" height="627" alt="image" src="https://github.com/user-attachments/assets/0a580ae2-9e70-4c6d-b840-23502d2a1204" />
+)
+
+---
 
 ## Running The Project
 
@@ -112,4 +123,7 @@ streamlit run dashboard/app.py
 ## Author
 
 Amogh Raman
-Data Engineer | Apache Spark | Kafka | Airflow | GCP
+
+Software Engineer @ HSBC
+
+Skills: Apache Spark, Kafka, Python, SQL, PostgreSQL, GCP, Airflow
