@@ -1,5 +1,7 @@
 import json
 import time
+import random
+import uuid
 from kafka import KafkaProducer
 
 TOPIC_NAME = "transactions_topic"
@@ -9,32 +11,37 @@ producer = KafkaProducer(
     value_serializer=lambda v: json.dumps(v).encode("utf-8")
 )
 
-transactions = [
-    {
-        "transaction_id": "TXN1001",
-        "customer_id": "CUST101",
-        "amount": 5000,
-        "country": "IN"
-    },
-    {
-        "transaction_id": "TXN1002",
-        "customer_id": "CUST102",
-        "amount": 750000,
-        "country": "NG"
-    }
+countries = [
+    "IN",
+    "US",
+    "UK",
+    "NG",
+    "BR",
+    "CN",
+    "RU",
+    "ZA"
 ]
 
-for txn in transactions:
+print("Fraud Producer Started...")
+
+while True:
+    txn = {
+        "transaction_id": str(uuid.uuid4()),
+        "customer_id": f"CUST{random.randint(100, 999)}",
+        "amount": random.randint(1000, 1500000),
+        "country": random.choice(countries)
+    }
 
     producer.send(
         TOPIC_NAME,
         value=txn
     )
 
-    print(f"Published: {txn['transaction_id']}")
+    print(
+        f"Published: "
+        f"{txn['transaction_id']} | "
+        f"{txn['amount']} | "
+        f"{txn['country']}"
+    )
 
     time.sleep(0.2)
-
-producer.flush()
-
-print("All messages published")

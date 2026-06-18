@@ -4,6 +4,7 @@ import psycopg2
 
 TOPIC_NAME = "transactions_topic"
 
+# Kafka Consumer
 consumer = KafkaConsumer(
     TOPIC_NAME,
     bootstrap_servers="localhost:9092",
@@ -13,6 +14,7 @@ consumer = KafkaConsumer(
     value_deserializer=lambda m: json.loads(m.decode("utf-8"))
 )
 
+# PostgreSQL Connection
 conn = psycopg2.connect(
     host="localhost",
     database="frauddb",
@@ -22,6 +24,7 @@ conn = psycopg2.connect(
 
 cursor = conn.cursor()
 
+
 def calculate_risk(transaction):
 
     amount = transaction["amount"]
@@ -29,6 +32,7 @@ def calculate_risk(transaction):
 
     score = 0
 
+    # Amount-based scoring
     if amount > 1000000:
         score += 70
 
@@ -38,9 +42,11 @@ def calculate_risk(transaction):
     elif amount > 100000:
         score += 20
 
+    # Country-based scoring
     if country not in ["IN", "US", "UK"]:
         score += 30
 
+    # Risk classification
     if score >= 80:
         return "CRITICAL"
 
@@ -51,51 +57,72 @@ def calculate_risk(transaction):
         return "MEDIUM"
 
     return "LOW"
+
+
+print("Fraud Consumer Started...")
+
+
 for message in consumer:
 
-    txn = message.value
+    try:
 
-    risk = calculate_risk(txn)
+        txn = message.value
 
-    print(
-        f"Transaction={txn['transaction_id']} "
-        f"Amount={txn['amount']} "
-        f"Country={txn['country']} "
-        f"Risk={risk}"
-    )
+        risk = calculate_risk(txn)
 
-    cursor.execute(
-    """
-    INSERT INTO fraud_alerts(
-        transaction_id,
-        risk_level
-    )
-    VALUES (%s,%s)
-    ON CONFLICT (transaction_id)
-    DO NOTHING
-    """,
-    (
-        txn["transaction_id"],
-        risk
-    )
-)
+        print(
+            f"Transaction={txn['transaction_id']} | "
+            f"Amount={txn['amount']} | "
+            f"Country={txn['country']} | "
+            f"Risk={risk}"
+        )
 
-    if risk in ("HIGH", "CRITICAL"):
-
+        # Store all transactions
         cursor.execute(
-    """
-    INSERT INTO fraud_alerts(
-        transaction_id,
-        risk_level
-    )
-    VALUES (%s,%s)
-    ON CONFLICT (transaction_id)
-    DO NOTHING
-    """,
-    (
-        txn["transaction_id"],
-        risk
-    )
-)
+            """
+            INSERT INTO transactions (
+                transaction_id,
+                customer_id,
+                amount,
+                country,
+                risk_level
+            )
+            VALUES (%s, %s, %s, %s, %s)
+            ON CONFLICT (transaction_id)
+            DO NOTHING
+            """,
+            (
+                txn["transaction_id"],
+                txn["customer_id"],
+                txn["amount"],
+                txn["country"],
+                risk
+            )
+        )
 
-    conn.commit()
+        # Store only suspicious transactions
+        if risk in ("HIGH", "CRITICAL"):
+
+            cursor.execute(
+                """
+                INSERT INTO fraud_alerts (
+                    transaction_id,
+                    risk_level
+                )
+                VALUES (%s, %s)
+                ON CONFLICT (transaction_id)
+                DO NOTHING
+                """,
+                (
+                    txn["transaction_id"],
+                    risk
+                )
+            )
+
+        conn.commit()
+
+    except Exception as e:
+
+        print(f"Error processing transaction: {e}")
+
+        conn.rollback()
