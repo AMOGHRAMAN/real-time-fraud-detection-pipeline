@@ -36,7 +36,8 @@ PostgreSQL
 
 Streamlit Dashboard
 
----
+<img width="1201" height="1309" alt="image" src="https://github.com/user-attachments/assets/f803b2d4-ad8d-4952-ae35-bb198388cfaf" />
+
 
 ## Features
 
