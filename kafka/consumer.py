@@ -1,11 +1,11 @@
 import json
 from kafka import KafkaConsumer
-from fraud_engine import calculate_risk
 import psycopg2
+
+from dlq_producer import send_to_dlq
 
 TOPIC_NAME = "transactions_topic"
 
-# Kafka Consumer
 consumer = KafkaConsumer(
     TOPIC_NAME,
     bootstrap_servers="localhost:9092",
@@ -15,7 +15,6 @@ consumer = KafkaConsumer(
     value_deserializer=lambda m: json.loads(m.decode("utf-8"))
 )
 
-# PostgreSQL Connection
 conn = psycopg2.connect(
     host="localhost",
     database="frauddb",
@@ -33,7 +32,6 @@ def calculate_risk(transaction):
 
     score = 0
 
-    # Amount-based scoring
     if amount > 1000000:
         score += 70
 
@@ -43,11 +41,9 @@ def calculate_risk(transaction):
     elif amount > 100000:
         score += 20
 
-    # Country-based scoring
     if country not in ["IN", "US", "UK"]:
         score += 30
 
-    # Risk classification
     if score >= 80:
         return "CRITICAL"
 
@@ -60,14 +56,34 @@ def calculate_risk(transaction):
     return "LOW"
 
 
+def validate_transaction(txn):
+
+    required_fields = [
+        "transaction_id",
+        "customer_id",
+        "amount",
+        "country"
+    ]
+
+    for field in required_fields:
+
+        if field not in txn:
+
+            raise ValueError(
+                f"Missing required field: {field}"
+            )
+
+
 print("Fraud Consumer Started...")
 
 
 for message in consumer:
 
+    txn = message.value
+
     try:
 
-        txn = message.value
+        validate_transaction(txn)
 
         risk = calculate_risk(txn)
 
@@ -78,7 +94,6 @@ for message in consumer:
             f"Risk={risk}"
         )
 
-        # Store all transactions
         cursor.execute(
             """
             INSERT INTO transactions (
@@ -101,7 +116,6 @@ for message in consumer:
             )
         )
 
-        # Store only suspicious transactions
         if risk in ("HIGH", "CRITICAL"):
 
             cursor.execute(
@@ -124,6 +138,14 @@ for message in consumer:
 
     except Exception as e:
 
-        print(f"Error processing transaction: {e}")
-
         conn.rollback()
+
+        print(
+            f"FAILED Transaction={txn.get('transaction_id')} "
+            f"| Error={str(e)}"
+        )
+
+        send_to_dlq(
+            txn,
+            str(e)
+        )

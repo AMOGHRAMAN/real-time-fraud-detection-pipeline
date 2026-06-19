@@ -25,12 +25,22 @@ countries = [
 print("Fraud Producer Started...")
 
 while True:
+
     txn = {
         "transaction_id": str(uuid.uuid4()),
-        "customer_id": f"CUST{random.randint(100, 999)}",
-        "amount": random.randint(1000, 1500000),
+        "customer_id": f"CUST{random.randint(100,999)}",
+        "amount": random.randint(1000,1500000),
         "country": random.choice(countries)
     }
+
+    # Generate bad records intentionally
+    if random.randint(1,10) == 1:
+
+        txn = {
+            "transaction_id": str(uuid.uuid4()),
+            "customer_id": f"CUST{random.randint(100,999)}",
+            "amount": random.randint(1000,1500000)
+        }
 
     producer.send(
         TOPIC_NAME,
@@ -39,9 +49,9 @@ while True:
 
     print(
         f"Published: "
-        f"{txn['transaction_id']} | "
-        f"{txn['amount']} | "
-        f"{txn['country']}"
+        f"{txn.get('transaction_id')} | "
+        f"{txn.get('amount')} | "
+        f"{txn.get('country','MISSING')}"
     )
 
     time.sleep(0.2)
