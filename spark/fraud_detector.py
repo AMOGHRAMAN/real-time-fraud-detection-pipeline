@@ -3,7 +3,7 @@ from pyspark.sql.functions import col
 
 spark = (
     SparkSession.builder
-    .appName("FraudDetectionPipeline")
+    .appName("FraudDetection")
     .config(
         "spark.jars.packages",
         "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1"
@@ -11,26 +11,25 @@ spark = (
     .getOrCreate()
 )
 
-spark.sparkContext.setLogLevel("ERROR")
+spark.sparkContext.setLogLevel("WARN")
 
 df = (
     spark.readStream
     .format("kafka")
     .option("kafka.bootstrap.servers", "localhost:9092")
-    .option("subscribe", "transactions_topic")
-    .option("startingOffsets", "earliest")
+    .option("subscribe", "transactions")
+    .option("startingOffsets", "latest")
     .load()
 )
 
-transactions = df.selectExpr(
-    "CAST(value AS STRING) as transaction_json"
+result = df.selectExpr(
+    "CAST(value AS STRING)"
 )
 
 query = (
-    transactions.writeStream
-    .outputMode("append")
+    result.writeStream
     .format("console")
-    .option("truncate", "false")
+    .outputMode("append")
     .start()
 )
 
