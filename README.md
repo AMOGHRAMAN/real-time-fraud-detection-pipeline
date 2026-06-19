@@ -108,6 +108,24 @@ streamlit run dashboard/app.py
 * Invalid or malformed events are redirected to the Dead Letter Queue.
 * Streamlit Dashboard visualizes fraud metrics and transaction insights.
 
+## Production Patterns Implemented
+
+### 1. Structured Logging
+- Context-aware logs at each stage (ingestion, scoring, alerting)
+- Enables trace correlation across Kafka → scoring → database
+
+### 2. Schema Validation
+- Confluent/Protobuf schemas enforce message structure
+- Invalid messages fail-fast before processing
+
+### 3. Kafka Dead Letter Queue
+- Failed messages routed to separate topic for analysis
+- Pipeline continues without blockage
+
+### 4. Idempotent Writes
+- PostgreSQL unique constraints prevent duplicate alerts
+- Safe retry semantics for failed database operations
+
 ## Future Enhancements
 
 * Spark Structured Streaming
@@ -124,4 +142,4 @@ Amogh Raman
 
 Software Engineer @ HSBC
 
-Skills: Apache Spark, Kafka, Python, SQL, PostgreSQL, GCP, Airflow
+Skills: Apache Spark, Kafka, Python, SQL, PostgreSQL, GCP, Airflow, Java
