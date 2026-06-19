@@ -1,10 +1,21 @@
 import json
+import logging
 from kafka import KafkaConsumer
 import psycopg2
 
 from dlq_producer import send_to_dlq
 
+# Logging Configuration
+
+logging.basicConfig(
+    filename="logs/fraud_pipeline.log",
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s"
+)
+
 TOPIC_NAME = "transactions_topic"
+
+# Kafka Consumer
 
 consumer = KafkaConsumer(
     TOPIC_NAME,
@@ -14,6 +25,8 @@ consumer = KafkaConsumer(
     enable_auto_commit=True,
     value_deserializer=lambda m: json.loads(m.decode("utf-8"))
 )
+
+# PostgreSQL Connection
 
 conn = psycopg2.connect(
     host="localhost",
@@ -32,6 +45,7 @@ def calculate_risk(transaction):
 
     score = 0
 
+    # Amount Based Scoring
     if amount > 1000000:
         score += 70
 
@@ -41,9 +55,11 @@ def calculate_risk(transaction):
     elif amount > 100000:
         score += 20
 
+    # Country Based Scoring
     if country not in ["IN", "US", "UK"]:
         score += 30
 
+    # Risk Classification
     if score >= 80:
         return "CRITICAL"
 
@@ -75,6 +91,7 @@ def validate_transaction(txn):
 
 
 print("Fraud Consumer Started...")
+logging.info("Fraud Consumer Started")
 
 
 for message in consumer:
@@ -87,13 +104,20 @@ for message in consumer:
 
         risk = calculate_risk(txn)
 
-        print(
+        message_text = (
             f"Transaction={txn['transaction_id']} | "
             f"Amount={txn['amount']} | "
             f"Country={txn['country']} | "
             f"Risk={risk}"
         )
 
+        print(message_text)
+
+        logging.info(message_text)
+
+        
+        # Store Transaction
+        
         cursor.execute(
             """
             INSERT INTO transactions (
@@ -116,6 +140,9 @@ for message in consumer:
             )
         )
 
+        
+        # Store Fraud Alerts
+        
         if risk in ("HIGH", "CRITICAL"):
 
             cursor.execute(
@@ -134,16 +161,26 @@ for message in consumer:
                 )
             )
 
+            logging.warning(
+                f"Fraud Alert Generated | "
+                f"Transaction={txn['transaction_id']} | "
+                f"Risk={risk}"
+            )
+
         conn.commit()
 
     except Exception as e:
 
         conn.rollback()
 
-        print(
+        error_message = (
             f"FAILED Transaction={txn.get('transaction_id')} "
             f"| Error={str(e)}"
         )
+
+        print(error_message)
+
+        logging.error(error_message)
 
         send_to_dlq(
             txn,
